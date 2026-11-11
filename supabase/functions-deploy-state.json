@@ -1,0 +1,13 @@
+{
+  "projectId": "72806231",
+  "functions": {
+    "manage-employee": {
+      "hasChanged": false,
+      "hash": "81e146b8b107814a94b38ca86e377e1d991bba410729b6a2b6d523b6e1490d76"
+    },
+    "setup-admin": {
+      "hasChanged": false,
+      "hash": "0fa39f8216a67ae407a9b244f9b5a11189f454cac710d780526bfb8509286ecc"
+    }
+  }
+}

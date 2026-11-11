@@ -1,0 +1,5 @@
+[functions.setup-admin]
+verify_jwt = false
+
+[functions.manage-employee]
+verify_jwt = true
