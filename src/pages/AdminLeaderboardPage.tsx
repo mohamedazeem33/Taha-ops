@@ -29,21 +29,21 @@ export function AdminLeaderboardPage() {
       <div className="space-y-8 animate-slide-up">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-4xl">
               Leaderboard
             </h1>
-            <p className="mt-2 text-slate-500 dark:text-slate-400">
+            <p className="mt-2 text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
               {period === 'weekly' ? 'This week (resets Monday 12 AM IST)' : 'All-time standings'}
             </p>
           </div>
-          <div className="flex w-full gap-1 rounded-2xl border border-slate-200 bg-white p-1.5 shadow-sm sm:w-auto dark:border-slate-800 dark:bg-slate-900">
+          <div className="flex w-full gap-1 rounded-2xl border border-white/60 bg-white/85 p-1.5 shadow-sm sm:w-auto dark:border-white/10 dark:bg-[#100e28]/85 backdrop-blur-md">
             <button
               type="button"
               onClick={() => setPeriod('weekly')}
-              className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium transition sm:flex-none ${
+              className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium transition sm:flex-none cursor-pointer ${
                 period === 'weekly'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
+                  ? 'bg-gradient-to-r from-[#ff4d79] via-[#ff6a5c] to-[#ff9040] text-[#1c0627] font-bold shadow-sm shadow-[#ff4d79]/20'
+                  : 'text-slate-700 hover:bg-white/80 dark:text-slate-300 dark:hover:bg-white/10'
               }`}
             >
               Weekly
@@ -51,10 +51,10 @@ export function AdminLeaderboardPage() {
             <button
               type="button"
               onClick={() => setPeriod('all_time')}
-              className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium transition sm:flex-none ${
+              className={`flex-1 rounded-xl px-4 py-2 text-sm font-medium transition sm:flex-none cursor-pointer ${
                 period === 'all_time'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
+                  ? 'bg-gradient-to-r from-[#ff4d79] via-[#ff6a5c] to-[#ff9040] text-[#1c0627] font-bold shadow-sm shadow-[#ff4d79]/20'
+                  : 'text-slate-700 hover:bg-white/80 dark:text-slate-300 dark:hover:bg-white/10'
               }`}
             >
               All-time

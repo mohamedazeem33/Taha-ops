@@ -52,11 +52,11 @@ export function ChangePasswordPage() {
     <AppShell>
       <div className="mx-auto max-w-md animate-slide-up">
         <div className="mb-8 text-center">
-          <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">
+          <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#ff4d79]/25 to-[#ff9040]/25 text-white border border-white/20 shadow-lg">
             <KeyRound className="h-7 w-7" aria-hidden="true" />
           </span>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Choose your password</h1>
-          <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+          <h1 className="font-display text-2xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-3xl">Choose your password</h1>
+          <p className="mt-2 text-sm text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
             Your admin gave you a temporary password. Pick a new one to continue.
           </p>
         </div>

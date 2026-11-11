@@ -95,8 +95,8 @@ export function AdminRewardsPage() {
       <div className="space-y-8 animate-slide-up">
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">Rewards</h1>
-            <p className="mt-2 text-slate-500 dark:text-slate-400">Perks employees can redeem with their points.</p>
+            <h1 className="font-display text-3xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-4xl">Rewards</h1>
+            <p className="mt-2 text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">Perks employees can redeem with their points.</p>
           </div>
           <Button onClick={() => setShowAddModal(true)} className="w-full sm:w-auto">
             <Plus className="h-4 w-4" aria-hidden="true" />
@@ -175,7 +175,7 @@ export function AdminRewardsPage() {
                     {reward.description && (
                       <p className="mt-1 flex-1 text-sm text-slate-500 dark:text-slate-400">{reward.description}</p>
                     )}
-                    <p className="mt-3 text-lg font-bold tabular-nums text-brand-700 dark:text-brand-300">
+                    <p className="font-display mt-3 text-lg font-bold tabular-nums text-brand-700 dark:text-brand-300">
                       {reward.points_cost} pts
                     </p>
                     <div className="mt-4 flex gap-2.5">

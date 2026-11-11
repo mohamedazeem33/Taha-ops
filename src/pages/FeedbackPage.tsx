@@ -56,26 +56,26 @@ export function FeedbackPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-100 text-brand-700 dark:bg-brand-900/60 dark:text-brand-300">
+            <h1 className="font-display text-2xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-3xl flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#ff4d79]/25 to-[#ff9040]/25 text-white border border-white/20">
                 <Shield className="h-5 w-5" aria-hidden="true" />
               </span>
               Anonymous Feedback
             </h1>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
               Share honest feedback and recognize teammates privately. Your identity is always kept anonymous.
             </p>
           </div>
 
           {/* Sub tabs */}
-          <div className="inline-flex rounded-xl border border-slate-200 bg-white p-1 shadow-sm dark:border-slate-800 dark:bg-slate-900 self-start sm:self-auto">
+          <div className="inline-flex rounded-xl border border-white/60 bg-white/85 p-1 shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-[#100e28]/85 self-start sm:self-auto">
             <button
               type="button"
               onClick={() => setActiveTab('send')}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer ${
                 activeTab === 'send'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
+                  ? 'bg-gradient-to-r from-[#ff4d79] via-[#ff6a5c] to-[#ff9040] text-[#1c0627] font-bold shadow-sm shadow-[#ff4d79]/20'
+                  : 'text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
               }`}
             >
               <Send className="h-4 w-4" aria-hidden="true" />
@@ -84,10 +84,10 @@ export function FeedbackPage() {
             <button
               type="button"
               onClick={() => setActiveTab('inbox')}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition ${
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition cursor-pointer ${
                 activeTab === 'inbox'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'
+                  ? 'bg-gradient-to-r from-[#ff4d79] via-[#ff6a5c] to-[#ff9040] text-[#1c0627] font-bold shadow-sm shadow-[#ff4d79]/20'
+                  : 'text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
               }`}
             >
               <Lock className="h-4 w-4" aria-hidden="true" />
@@ -230,10 +230,10 @@ function SendFeedbackView() {
                       key={tag}
                       type="button"
                       onClick={() => setSelectedTag(isSelected ? null : tag)}
-                      className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition ${
+                      className={`inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-medium transition cursor-pointer ${
                         isSelected
-                          ? 'bg-brand-600 text-white shadow-sm'
-                          : 'border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700'
+                          ? 'bg-gradient-to-r from-[#ff4d79] via-[#ff6a5c] to-[#ff9040] text-[#1c0627] font-bold shadow-sm shadow-[#ff4d79]/20'
+                          : 'border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 dark:border-white/10 dark:bg-white/5 dark:text-slate-300 dark:hover:bg-white/10'
                       }`}
                     >
                       {tag === 'Great teamwork' || tag === 'Shoutout' ? (
@@ -302,9 +302,9 @@ function SendFeedbackView() {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 dark:border-slate-800 dark:bg-slate-900/60">
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Ground Rules
+        <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 dark:border-white/10 dark:bg-white/5">
+          <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+            Ground rules
           </h4>
           <ul className="mt-3 space-y-2 text-xs text-slate-600 dark:text-slate-400">
             <li className="flex items-start gap-2">
@@ -719,7 +719,7 @@ function FeedbackMessageCard({
                 Anonymous
               </span>
               {isUnread && (
-                <span className="rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-bold text-white uppercase tracking-wider">
+                <span className="rounded-full bg-gradient-to-r from-[#ff4d79] to-[#ff9040] px-2 py-0.5 text-[10px] font-bold text-[#1c0627]">
                   New
                 </span>
               )}

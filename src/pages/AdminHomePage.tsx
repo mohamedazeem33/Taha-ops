@@ -97,11 +97,11 @@ export function AdminHomePage() {
       <div className="space-y-8 animate-slide-up">
         <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="flex items-center gap-2 text-sm font-medium text-brand-700 dark:text-brand-300">
+            <p className="flex items-center gap-2 text-sm font-medium text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">
               <CalendarDays className="h-4 w-4" aria-hidden="true" />
-              {todayIST()} (IST)
+              {todayIST()}
             </p>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">
+            <h1 className="font-display mt-2 text-3xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-4xl">
               {greetingIST()}, {firstName}
             </h1>
           </div>

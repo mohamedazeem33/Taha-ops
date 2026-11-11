@@ -3,7 +3,91 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  html {
+    min-height: 100%;
   }
+
+  body {
+    min-height: 100%;
+    font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    color: #2A1238;
+    background-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    color: #f8fafc;
+  }
+
+  /* Focus ring styling using sunset pink */
+  :focus-visible {
+    outline: 2px solid #ff4f7b;
+    outline-offset: 2px;
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* FROSTED GLASS SURFACES (CARDS, TABLES, PANELS, MODALS, NAV)   */
+/* ------------------------------------------------------------- */
+
+/* Light mode frosted panel surfaces */
+.bg-white,
+.frosted-panel {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255, 255, 255, 0.65);
+}
+
+/* Dark mode frosted glass surfaces */
+.dark .bg-white,
+.dark .frosted-panel,
+.dark .dark\:bg-slate-900,
+.dark .dark\:bg-slate-950,
+.dark .dark\:bg-slate-950\/80 {
+  background-color: rgba(16, 14, 40, 0.82) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Dark mode text readability inside frosted glass */
+.dark .text-slate-900,
+.dark .text-slate-800,
+.dark .text-slate-700 {
+  color: #f8fafc !important;
+}
+
+.dark .text-slate-500,
+.dark .text-slate-400 {
+  color: rgba(235, 230, 245, 0.72) !important;
+}
+
+/* Soft dividers on frosted glass */
+.divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(42, 18, 56, 0.08);
+}
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ------------------------------------------------------------- */
+/* DIRECT-ON-GRADIENT HEADINGS & TEXT UTILITIES                  */
+/* ------------------------------------------------------------- */
+.page-title {
+  font-family: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 800;
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.page-subtitle {
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.page-eyebrow {
+  color: rgba(255, 255, 255, 0.92) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }

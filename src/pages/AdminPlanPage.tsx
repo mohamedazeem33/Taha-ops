@@ -52,11 +52,11 @@ export function AdminPlanPage() {
     <AdminLayout active="plan">
       <div className="space-y-8 animate-slide-up">
         <header>
-          <p className="text-sm font-medium text-brand-700 dark:text-brand-300">{todayIST()} (IST)</p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">
+          <p className="text-sm font-medium text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">{todayIST()}</p>
+          <h1 className="font-display mt-2 text-3xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-4xl">
             Today&apos;s plan
           </h1>
-          <p className="mt-2 text-slate-500 dark:text-slate-400">Pick an employee, then add the tasks they own for today.</p>
+          <p className="mt-2 text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">Pick an employee, then add the tasks they own for today.</p>
         </header>
 
         {loading && <Spinner label="Loading today's plan" />}

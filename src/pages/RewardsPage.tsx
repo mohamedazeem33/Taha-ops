@@ -61,9 +61,9 @@ export function RewardsPage() {
     <EmployeeLayout active="rewards">
       <div className="space-y-8 animate-slide-up">
         <header>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">Rewards</h1>
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
-            You have <span className="font-semibold text-brand-700 dark:text-brand-300">{totalPoints} points</span> to spend.
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-4xl">Rewards</h1>
+          <p className="mt-2 text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
+            You have <span className="font-bold text-[#ffd166]">{totalPoints} points</span> to spend.
           </p>
         </header>
 
@@ -95,7 +95,7 @@ export function RewardsPage() {
                     <p className="mt-1 flex-1 text-sm text-slate-500 dark:text-slate-400">{reward.description}</p>
                   )}
                   <div className="mt-4 flex items-center justify-between gap-3">
-                    <span className="text-lg font-bold tabular-nums text-brand-700 dark:text-brand-300">
+                    <span className="font-display text-lg font-bold tabular-nums text-brand-700 dark:text-brand-300">
                       {reward.points_cost} pts
                     </span>
                     <Button

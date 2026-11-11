@@ -69,20 +69,20 @@ export function AdminReportsPage() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100 flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-100 text-rose-700 dark:bg-rose-900/60 dark:text-rose-300">
+            <h1 className="font-display text-2xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-3xl flex items-center gap-2.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-500/20 text-rose-200 border border-rose-300/30">
                 <Flag className="h-5 w-5" aria-hidden="true" />
               </span>
               Reported Feedback
             </h1>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
               Review flagged anonymous messages. Regular non-reported feedback remains strictly private.
             </p>
           </div>
 
           <Button variant="secondary" size="sm" onClick={loadData} disabled={loading} className="self-start sm:self-auto">
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-            Refresh Reports
+            Refresh reports
           </Button>
         </div>
 
@@ -97,11 +97,11 @@ export function AdminReportsPage() {
                 <MessageSquare className="h-5 w-5" />
               </span>
             </div>
-            <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
+            <p className="font-display mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">
               {stats ? stats.total_sent_this_week : '—'}
             </p>
             <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
-              Aggregate peer recognitions across the workspace (IST)
+              Aggregate peer recognitions across the workspace this week
             </p>
           </div>
 
@@ -112,7 +112,7 @@ export function AdminReportsPage() {
                 <ShieldAlert className="h-5 w-5" />
               </span>
             </div>
-            <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-slate-100">
+            <p className="font-display mt-2 text-3xl font-black text-slate-900 dark:text-slate-100">
               {stats ? stats.total_reported : reports.length}
             </p>
             <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
@@ -153,8 +153,8 @@ export function AdminReportsPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Reported Messages ({reports.length})
+            <h2 className="text-sm font-semibold text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">
+              Reported messages ({reports.length})
             </h2>
 
             {reports.map((report) => (

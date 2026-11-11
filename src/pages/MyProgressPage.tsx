@@ -24,10 +24,10 @@ export function MyProgressPage() {
     <EmployeeLayout active="progress">
       <div className="space-y-8 animate-slide-up">
         <header>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-slate-100">
+          <h1 className="font-display text-3xl font-extrabold tracking-tight text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.4)] sm:text-4xl">
             My progress
           </h1>
-          <p className="mt-2 text-slate-500 dark:text-slate-400">Your points, streaks, and badges.</p>
+          <p className="mt-2 text-white/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]">Your points, streaks, and badges.</p>
         </header>
 
         {loading && <Spinner label="Loading your progress" />}
@@ -39,12 +39,12 @@ export function MyProgressPage() {
 
             {streak && (
               <section className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                  <p className="text-3xl font-bold text-orange-500">{streak.current_streak}</p>
+                <div className="rounded-2xl border border-white/60 bg-white p-5 text-center shadow-sm dark:border-white/10 dark:bg-slate-900">
+                  <p className="font-display text-3xl font-black text-orange-500">{streak.current_streak}</p>
                   <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Current streak</p>
                 </div>
-                <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                  <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">{streak.best_streak}</p>
+                <div className="rounded-2xl border border-white/60 bg-white p-5 text-center shadow-sm dark:border-white/10 dark:bg-slate-900">
+                  <p className="font-display text-3xl font-black text-slate-900 dark:text-slate-100">{streak.best_streak}</p>
                   <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Best streak</p>
                 </div>
               </section>
