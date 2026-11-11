@@ -9,6 +9,7 @@ const NAV_ITEMS: { route: AdminRoute; label: string }[] = [
   { route: 'time-requests', label: 'Time requests' },
   { route: 'leaderboard', label: 'Leaderboard' },
   { route: 'rewards', label: 'Rewards' },
+  { route: 'reports', label: 'Reports' },
 ];
 
 interface AdminLayoutProps {

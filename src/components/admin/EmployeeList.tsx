@@ -1,4 +1,4 @@
-import { Ban, RotateCcw, UserRound } from 'lucide-react';
+import { Ban, KeyRound, RotateCcw, UserRound } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { formatDateIST } from '@/lib/formatDate';
 import type { DayChip, DaySummary } from '@/lib/tasks';
@@ -8,9 +8,10 @@ interface EmployeeListProps {
   employees: Profile[];
   summaries: Record<string, DaySummary>;
   onRequestToggle: (employee: Profile) => void;
+  onRequestResetPin?: (employee: Profile) => void;
 }
 
-export function EmployeeList({ employees, summaries, onRequestToggle }: EmployeeListProps) {
+export function EmployeeList({ employees, summaries, onRequestToggle, onRequestResetPin }: EmployeeListProps) {
   if (employees.length === 0) {
     return (
       <div className="flex flex-col items-center px-6 py-14 text-center">
@@ -50,8 +51,19 @@ export function EmployeeList({ employees, summaries, onRequestToggle }: Employee
               </div>
             </div>
 
-            <div className="flex items-center justify-between gap-3 md:justify-end">
+            <div className="flex items-center justify-between gap-2.5 md:justify-end">
               {summary && <ProgressSummary summary={summary} />}
+              {onRequestResetPin && (
+                <Button
+                  variant="ghost"
+                  onClick={() => onRequestResetPin(employee)}
+                  className="!px-2.5 !py-2 text-xs text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+                  title="Reset Feedback PIN"
+                >
+                  <KeyRound className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span className="hidden sm:inline">Reset PIN</span>
+                </Button>
+              )}
               <Button
                 variant={employee.is_active ? 'danger' : 'secondary'}
                 onClick={() => onRequestToggle(employee)}

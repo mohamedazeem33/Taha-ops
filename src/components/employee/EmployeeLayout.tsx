@@ -7,6 +7,7 @@ const NAV_ITEMS: { route: EmployeeRoute; label: string }[] = [
   { route: 'progress', label: 'My progress' },
   { route: 'leaderboard', label: 'Leaderboard' },
   { route: 'rewards', label: 'Rewards' },
+  { route: 'feedback', label: 'Feedback' },
 ];
 
 interface EmployeeLayoutProps {

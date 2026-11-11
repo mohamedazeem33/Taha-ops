@@ -85,3 +85,7 @@ export function formatDeadlineIST(iso: string, now: Date = new Date()) {
     : new Intl.DateTimeFormat('en-IN', { timeZone: IST, day: 'numeric', month: 'short' }).format(new Date(iso));
   return `${dayLabel}, ${formatTimeIST(iso)}`;
 }
+
+export function formatDateTimeIST(iso: string) {
+  return formatDeadlineIST(iso);
+}

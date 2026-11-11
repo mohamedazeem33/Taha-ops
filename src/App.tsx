@@ -5,8 +5,10 @@ import { AdminHomePage } from '@/pages/AdminHomePage';
 import { AdminLeaderboardPage } from '@/pages/AdminLeaderboardPage';
 import { AdminPlanPage } from '@/pages/AdminPlanPage';
 import { AdminRewardsPage } from '@/pages/AdminRewardsPage';
+import { AdminReportsPage } from '@/pages/AdminReportsPage';
 import { AdminTimeRequestsPage } from '@/pages/AdminTimeRequestsPage';
 import { ChangePasswordPage } from '@/pages/ChangePasswordPage';
+import { FeedbackPage } from '@/pages/FeedbackPage';
 import { LeaderboardPage } from '@/pages/LeaderboardPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { MyProgressPage } from '@/pages/MyProgressPage';
@@ -35,6 +37,8 @@ export default function App() {
         return <AdminLeaderboardPage />;
       case 'rewards':
         return <AdminRewardsPage />;
+      case 'reports':
+        return <AdminReportsPage />;
       default:
         return <AdminHomePage />;
     }
@@ -47,6 +51,8 @@ export default function App() {
       return <LeaderboardPage />;
     case 'rewards':
       return <RewardsPage />;
+    case 'feedback':
+      return <FeedbackPage />;
     default:
       return <TodayPage />;
   }

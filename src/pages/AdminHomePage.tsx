@@ -12,6 +12,7 @@ import { useTeamEmployees } from '@/hooks/useTeamEmployees';
 import { useNow } from '@/hooks/useNow';
 import { greetingIST, todayIST, todayISTDate } from '@/lib/formatDate';
 import { callEdgeFunction } from '@/lib/edgeFunctions';
+import { adminResetFeedbackPin } from '@/lib/feedbackApi';
 import { isOpenStatus, summarizeDay, type DaySummary } from '@/lib/tasks';
 import type { Profile, Task } from '@/types/database';
 
@@ -24,8 +25,11 @@ export function AdminHomePage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showCloseDay, setShowCloseDay] = useState(false);
   const [pendingToggle, setPendingToggle] = useState<Profile | null>(null);
+  const [pendingResetPin, setPendingResetPin] = useState<Profile | null>(null);
+  const [resettingPin, setResettingPin] = useState(false);
   const [toggling, setToggling] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null);
 
   const firstName = account?.profile.full_name.split(' ')[0] ?? '';
   const loading = employeesLoading || tasksLoading;
@@ -49,6 +53,7 @@ export function AdminHomePage() {
     if (!pendingToggle) return;
     setToggling(true);
     setActionError(null);
+    setActionSuccess(null);
     try {
       await callEdgeFunction('manage-employee', {
         action: 'set_active',
@@ -61,6 +66,22 @@ export function AdminHomePage() {
       setActionError(toggleError instanceof Error ? toggleError.message : 'Something went wrong. Please try again.');
     } finally {
       setToggling(false);
+    }
+  };
+
+  const handleConfirmResetPin = async () => {
+    if (!pendingResetPin) return;
+    setResettingPin(true);
+    setActionError(null);
+    setActionSuccess(null);
+    try {
+      await adminResetFeedbackPin(pendingResetPin.id);
+      setActionSuccess(`Feedback PIN for ${pendingResetPin.full_name} has been reset. They can choose a new PIN when they next open the Feedback box.`);
+      setPendingResetPin(null);
+    } catch (pinError) {
+      setActionError(pinError instanceof Error ? pinError.message : 'Could not reset PIN.');
+    } finally {
+      setResettingPin(false);
     }
   };
 
@@ -123,7 +144,18 @@ export function AdminHomePage() {
                 </div>
               )}
 
-              <EmployeeList employees={employees} summaries={summaries} onRequestToggle={setPendingToggle} />
+              {actionSuccess && (
+                <div className="px-5 pt-4">
+                  <Alert tone="info">{actionSuccess}</Alert>
+                </div>
+              )}
+
+              <EmployeeList
+                employees={employees}
+                summaries={summaries}
+                onRequestToggle={setPendingToggle}
+                onRequestResetPin={setPendingResetPin}
+              />
             </section>
           </>
         )}
@@ -160,6 +192,25 @@ export function AdminHomePage() {
             </Button>
             <Button variant={isDeactivating ? 'danger' : 'primary'} loading={toggling} onClick={() => void handleConfirmToggle()}>
               {isDeactivating ? 'Deactivate' : 'Reactivate'}
+            </Button>
+          </div>
+        </Modal>
+      )}
+
+      {pendingResetPin && (
+        <Modal
+          title={`Reset Feedback PIN for ${pendingResetPin.full_name}?`}
+          description="Their current PIN will be removed. The next time they open the Feedback box, they will be prompted to set a new 4-digit PIN."
+          onClose={() => {
+            if (!resettingPin) setPendingResetPin(null);
+          }}
+        >
+          <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+            <Button variant="secondary" onClick={() => setPendingResetPin(null)} disabled={resettingPin}>
+              Cancel
+            </Button>
+            <Button variant="primary" loading={resettingPin} onClick={() => void handleConfirmResetPin()}>
+              Reset PIN
             </Button>
           </div>
         </Modal>

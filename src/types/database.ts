@@ -112,3 +112,54 @@ export interface LeaderboardRow {
   total_points: number;
   current_streak: number;
 }
+
+export type FeedbackTag = 'Late to meeting' | 'Not focused' | 'Great teamwork' | 'Shoutout';
+
+export interface FeedbackPinStatus {
+  has_pin: boolean;
+  is_locked: boolean;
+  locked_until?: string;
+  remaining_seconds: number;
+}
+
+export interface FeedbackVerifyResult {
+  success: boolean;
+  is_locked: boolean;
+  locked_until?: string;
+  remaining_seconds: number;
+  attempts_left: number;
+  error?: string;
+}
+
+export interface FeedbackRecipient {
+  id: string;
+  full_name: string;
+}
+
+export interface FeedbackInboxMessage {
+  id: string;
+  receiver_id: string;
+  tag: FeedbackTag | null;
+  message: string;
+  created_at: string;
+  read_at: string | null;
+  is_reported: boolean;
+  reported_at: string | null;
+}
+
+export interface ReportedFeedbackMessage {
+  id: string;
+  sender_id: string;
+  sender_name: string;
+  receiver_id: string;
+  receiver_name: string;
+  tag: FeedbackTag | null;
+  message: string;
+  created_at: string;
+  reported_at: string;
+}
+
+export interface AdminFeedbackStats {
+  total_sent_this_week: number;
+  total_reported: number;
+}

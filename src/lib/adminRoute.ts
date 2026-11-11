@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export type AdminRoute = 'home' | 'plan' | 'confirmations' | 'time-requests' | 'leaderboard' | 'rewards';
+export type AdminRoute = 'home' | 'plan' | 'confirmations' | 'time-requests' | 'leaderboard' | 'rewards' | 'reports';
 
 const ADMIN_ROUTES: AdminRoute[] = [
   'home',
@@ -9,6 +9,7 @@ const ADMIN_ROUTES: AdminRoute[] = [
   'time-requests',
   'leaderboard',
   'rewards',
+  'reports',
 ];
 
 export const ADMIN_ROUTE_PATHS: Record<AdminRoute, string> = {
@@ -18,6 +19,7 @@ export const ADMIN_ROUTE_PATHS: Record<AdminRoute, string> = {
   'time-requests': '#/admin/time-requests',
   leaderboard: '#/admin/leaderboard',
   rewards: '#/admin/rewards',
+  reports: '#/admin/reports',
 };
 
 function routeFromHash(hash: string): AdminRoute {
@@ -38,15 +40,16 @@ export function useAdminRoute(): AdminRoute {
   return route;
 }
 
-export type EmployeeRoute = 'today' | 'progress' | 'leaderboard' | 'rewards';
+export type EmployeeRoute = 'today' | 'progress' | 'leaderboard' | 'rewards' | 'feedback';
 
-const EMPLOYEE_ROUTES: EmployeeRoute[] = ['today', 'progress', 'leaderboard', 'rewards'];
+const EMPLOYEE_ROUTES: EmployeeRoute[] = ['today', 'progress', 'leaderboard', 'rewards', 'feedback'];
 
 export const EMPLOYEE_ROUTE_PATHS: Record<EmployeeRoute, string> = {
   today: '#/today',
   progress: '#/progress',
   leaderboard: '#/leaderboard',
   rewards: '#/rewards',
+  feedback: '#/feedback',
 };
 
 function employeeRouteFromHash(hash: string): EmployeeRoute {
