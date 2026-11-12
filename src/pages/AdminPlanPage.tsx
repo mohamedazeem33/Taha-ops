@@ -18,25 +18,40 @@ export function AdminPlanPage() {
   const today = todayISTDate();
   const { employees, loading: employeesLoading, error: employeesError } = useTeamEmployees();
   const activeEmployees = employees.filter((employee) => employee.is_active);
-  const { tasks, loading: tasksLoading, error: tasksError, reload } = useTasksForDay(today);
+  const { tasks, loading: tasksLoading, error: tasksError, reload, setTasks } = useTasksForDay(today, true, true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [editTask, setEditTask] = useState<TaskWithRequests | null>(null);
   const [deleteTask, setDeleteTask] = useState<TaskWithRequests | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const selected = activeEmployees.find((employee) => employee.id === selectedId) ?? null;
-  const plannedTasks = selected ? tasks.filter((task) => task.assigned_to === selected.id) : [];
+  const plannedTasks = selected
+    ? tasks
+        .filter((task) => task.assigned_to === selected.id)
+        .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime())
+    : [];
 
   const handleAssign = async (drafts: TaskDraft[]) => {
     if (!selected || !account) return false;
     setSaveError(null);
     try {
-      await createTasks({
+      const created = await createTasks({
         assignedTo: selected.id,
         assignedBy: account.profile.id,
         taskDate: today,
         drafts,
       });
+
+      // Show the new tasks immediately in local state
+      if (created && created.length > 0) {
+        setTasks((prev) => {
+          const map = new Map<string, TaskWithRequests>();
+          for (const t of created) map.set(t.id, t);
+          for (const t of prev) if (!map.has(t.id)) map.set(t.id, t);
+          return Array.from(map.values());
+        });
+      }
+
       await reload();
       return true;
     } catch (assignError) {
@@ -107,7 +122,7 @@ export function AdminPlanPage() {
                       <ListChecks className="h-5 w-5" aria-hidden="true" />
                     </span>
                     <h2 className="font-semibold text-slate-900 dark:text-slate-100">
-                      {selected.full_name}&apos;s tasks today ({plannedTasks.length})
+                      {selected.full_name}&apos;s tasks ({plannedTasks.length})
                     </h2>
                   </div>
 

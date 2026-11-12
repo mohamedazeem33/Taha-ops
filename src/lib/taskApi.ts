@@ -10,14 +10,56 @@ function toError(error: { message?: string } | null): Error {
 
 const TASK_WITH_REQUESTS = `${TASK_COLUMNS}, time_requests(id, status, requested_deadline, created_at)`;
 
-export async function fetchTasksForDay(day: string): Promise<TaskWithRequests[]> {
+export async function fetchTasksForDay(day: string, includeCarriedOver = true): Promise<TaskWithRequests[]> {
+  if (!includeCarriedOver) {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select(TASK_WITH_REQUESTS)
+      .eq('task_date', day)
+      .order('deadline', { ascending: true });
+    if (error || !Array.isArray(data)) throw toError(error);
+    return data as TaskWithRequests[];
+  }
+
+  // Fetch today's tasks and any unfinished tasks from earlier days (assigned, rejected, done_pending)
+  const [currentDayRes, carriedOverRes] = await Promise.all([
+    supabase
+      .from('tasks')
+      .select(TASK_WITH_REQUESTS)
+      .eq('task_date', day)
+      .order('deadline', { ascending: true }),
+    supabase
+      .from('tasks')
+      .select(TASK_WITH_REQUESTS)
+      .lt('task_date', day)
+      .in('status', ['assigned', 'rejected', 'done_pending'])
+      .order('deadline', { ascending: true }),
+  ]);
+
+  if (currentDayRes.error) throw toError(currentDayRes.error);
+  if (carriedOverRes.error) throw toError(carriedOverRes.error);
+
+  const combined = [...(currentDayRes.data ?? []), ...(carriedOverRes.data ?? [])];
+  const uniqueMap = new Map<string, TaskWithRequests>();
+  for (const t of combined) {
+    uniqueMap.set(t.id, t as TaskWithRequests);
+  }
+  return Array.from(uniqueMap.values());
+}
+
+export interface CloseDayAuditTask extends Task {
+  assignee?: { full_name: string } | null;
+}
+
+export async function fetchAuditTasksForCloseDay(day: string): Promise<CloseDayAuditTask[]> {
   const { data, error } = await supabase
     .from('tasks')
-    .select(TASK_WITH_REQUESTS)
-    .eq('task_date', day)
+    .select(`${TASK_COLUMNS}, assignee:profiles!assigned_to(full_name)`)
+    .lte('task_date', day)
+    .in('status', ['assigned', 'rejected', 'done_pending'])
     .order('deadline', { ascending: true });
   if (error || !Array.isArray(data)) throw toError(error);
-  return data as TaskWithRequests[];
+  return data as unknown as CloseDayAuditTask[];
 }
 
 export async function fetchTasksAwaitingConfirmation() {
@@ -76,7 +118,7 @@ export async function createTasks(input: {
   assignedBy: string;
   taskDate: string;
   drafts: TaskDraft[];
-}) {
+}): Promise<TaskWithRequests[]> {
   const rows = input.drafts.map((draft) => ({
     assigned_to: input.assignedTo,
     assigned_by: input.assignedBy,
@@ -86,8 +128,12 @@ export async function createTasks(input: {
     description: draft.description,
     deadline: draft.deadline,
   }));
-  const { error } = await supabase.from('tasks').insert(rows);
-  if (error) throw toError(error);
+  const { data, error } = await supabase
+    .from('tasks')
+    .insert(rows)
+    .select(TASK_WITH_REQUESTS);
+  if (error || !data) throw toError(error);
+  return data as unknown as TaskWithRequests[];
 }
 
 export async function updateTask(taskId: string, draft: TaskDraft) {

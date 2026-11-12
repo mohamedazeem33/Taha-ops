@@ -58,9 +58,14 @@ export function defaultDeadlineInput(day: string) {
   return `${day}T18:00`;
 }
 
-/** Converts a datetime-local value (read as IST) into an ISO timestamp. */
+/** Converts a datetime-local value (read as IST) into an ISO timestamp. Supports input with or without seconds. */
 export function istInputToIso(value: string) {
-  return new Date(`${value}:00${IST_OFFSET}`).toISOString();
+  if (!value) return '';
+  const trimmed = value.trim();
+  const timePart = trimmed.split('T')[1] ?? '';
+  const colonCount = (timePart.match(/:/g) || []).length;
+  const withSeconds = colonCount === 1 ? `${trimmed}:00` : trimmed;
+  return new Date(`${withSeconds}${IST_OFFSET}`).toISOString();
 }
 
 /** Converts an ISO timestamp into a datetime-local value shown in IST. */

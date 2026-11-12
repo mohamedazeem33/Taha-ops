@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { CalendarDays, Sparkles } from 'lucide-react';
 import { Confetti } from '@/components/Confetti';
 import { Toast, type ToastMessage } from '@/components/Toast';
@@ -13,7 +13,7 @@ import { useTasksForDay } from '@/hooks/useTasksForDay';
 import { useNow } from '@/hooks/useNow';
 import { greetingIST, todayIST, todayISTDate } from '@/lib/formatDate';
 import { markTaskDone } from '@/lib/taskApi';
-import { isDoneStatus } from '@/lib/tasks';
+import { isDoneStatus, isOverdue } from '@/lib/tasks';
 import type { PointsLogEntry, TaskWithRequests } from '@/types/database';
 
 export function TodayPage() {
@@ -33,6 +33,16 @@ export function TodayPage() {
   const firstName = account?.profile.full_name.split(' ')[0] ?? '';
   const doneCount = tasks.filter((task) => isDoneStatus(task.status)).length;
   const allDone = tasks.length > 0 && doneCount === tasks.length;
+
+  const sortedTasks = useMemo(() => {
+    return [...tasks].sort((a, b) => {
+      const aOverdue = isOverdue(a, now);
+      const bOverdue = isOverdue(b, now);
+      if (aOverdue && !bOverdue) return -1;
+      if (!aOverdue && bOverdue) return 1;
+      return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+    });
+  }, [tasks, now]);
 
   const handleDone = async (task: TaskWithRequests) => {
     setBusyTaskId(task.id);
@@ -107,7 +117,7 @@ export function TodayPage() {
               </section>
             ) : (
               <div className="grid gap-4 md:grid-cols-2">
-                {tasks.map((task) => (
+                {sortedTasks.map((task) => (
                   <TaskCard
                     key={task.id}
                     task={task}

@@ -21,7 +21,7 @@ export function AdminHomePage() {
   const today = todayISTDate();
   const now = useNow(30_000);
   const { employees, loading: employeesLoading, error: employeesError, reload: reloadEmployees } = useTeamEmployees();
-  const { tasks, loading: tasksLoading, error: tasksError, reload: reloadTasks } = useTasksForDay(today);
+  const { tasks, loading: tasksLoading, error: tasksError, reload: reloadTasks } = useTasksForDay(today, true, true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showCloseDay, setShowCloseDay] = useState(false);
   const [pendingToggle, setPendingToggle] = useState<Profile | null>(null);

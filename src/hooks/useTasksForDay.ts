@@ -3,21 +3,21 @@ import { fetchTasksForDay } from '@/lib/taskApi';
 import { supabase } from '@/lib/supabase';
 import type { TaskWithRequests } from '@/types/database';
 
-export function useTasksForDay(day: string, live = false) {
+export function useTasksForDay(day: string, live = false, includeCarriedOver = true) {
   const [tasks, setTasks] = useState<TaskWithRequests[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const reload = useCallback(async () => {
     try {
-      setTasks(await fetchTasksForDay(day));
+      setTasks(await fetchTasksForDay(day, includeCarriedOver));
       setError(null);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "We couldn't load today's tasks.");
     } finally {
       setLoading(false);
     }
-  }, [day]);
+  }, [day, includeCarriedOver]);
 
   useEffect(() => {
     void reload();
@@ -35,5 +35,5 @@ export function useTasksForDay(day: string, live = false) {
     };
   }, [day, live, reload]);
 
-  return { tasks, loading, error, reload };
+  return { tasks, loading, error, reload, setTasks };
 }

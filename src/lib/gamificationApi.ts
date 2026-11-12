@@ -33,8 +33,15 @@ export async function fetchMyStreak(): Promise<EmployeeStreak | null> {
   return data as EmployeeStreak | null;
 }
 
-export async function fetchMyPoints(): Promise<number> {
-  const { data, error } = await supabase.rpc('get_employee_points', { p_employee_id: null });
+export async function fetchMyPoints(employeeId?: string): Promise<number> {
+  let targetId = employeeId;
+  if (!targetId) {
+    const { data: { user } } = await supabase.auth.getUser();
+    targetId = user?.id;
+  }
+  const { data, error } = await supabase.rpc('get_employee_points', {
+    p_employee_id: targetId ?? null,
+  });
   if (error) throw toError(error);
   return typeof data === 'number' ? data : 0;
 }

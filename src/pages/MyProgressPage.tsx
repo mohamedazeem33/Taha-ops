@@ -3,15 +3,22 @@ import { BadgeGallery } from '@/components/employee/BadgeGallery';
 import { StatsTopBar } from '@/components/employee/StatsTopBar';
 import { Alert, Spinner } from '@/components/ui';
 import { useGamificationStats } from '@/hooks/useGamificationStats';
+import { useTasksForDay } from '@/hooks/useTasksForDay';
 import { fetchAllBadges } from '@/lib/gamificationApi';
-import { formatDeadlineIST } from '@/lib/formatDate';
+import { formatDeadlineIST, todayISTDate } from '@/lib/formatDate';
+import { isDoneStatus } from '@/lib/tasks';
 import { useEffect, useState } from 'react';
 import type { Badge } from '@/types/database';
 
 export function MyProgressPage() {
+  const today = todayISTDate();
+  const { tasks } = useTasksForDay(today, false, true);
   const { totalPoints, streak, pointsLog, badges, loading, error } = useGamificationStats();
   const [allBadges, setAllBadges] = useState<Badge[]>([]);
   const [badgesLoading, setBadgesLoading] = useState(true);
+
+  const doneCount = tasks.filter((task) => isDoneStatus(task.status)).length;
+  const totalTasks = tasks.length;
 
   useEffect(() => {
     void fetchAllBadges()
@@ -35,7 +42,7 @@ export function MyProgressPage() {
 
         {!loading && !error && (
           <>
-            <StatsTopBar totalPoints={totalPoints} currentStreak={streak?.current_streak ?? 0} doneCount={0} totalTasks={0} />
+            <StatsTopBar totalPoints={totalPoints} currentStreak={streak?.current_streak ?? 0} doneCount={doneCount} totalTasks={totalTasks} />
 
             {streak && (
               <section className="grid grid-cols-2 gap-3">
