@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ArrowLeft, CheckCircle2, Clock3, Edit3, Hourglass, ListTodo, UserRound } from 'lucide-react';
+import { Toast, type ToastMessage } from '@/components/Toast';
 import { TaskStatusBadge } from '@/components/TaskStatusBadge';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { EditTaskModal } from '@/components/admin/plan/EditTaskModal';
@@ -30,6 +31,7 @@ export function AdminOverviewTasksPage() {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string>('all');
   const [reviewingTask, setReviewingTask] = useState<Task | null>(null);
   const [editingTask, setEditingTask] = useState<TaskWithRequests | null>(null);
+  const [toast, setToast] = useState<ToastMessage | null>(null);
 
   const metricConfig = {
     planned: {
@@ -250,12 +252,17 @@ export function AdminOverviewTasksPage() {
         <EditTaskModal
           task={editingTask}
           onClose={() => setEditingTask(null)}
-          onSaved={() => {
+          onSaved={(toastMessage) => {
             setEditingTask(null);
+            if (toastMessage) {
+              setToast({ id: Date.now(), text: toastMessage, tone: 'points' });
+            }
             void reloadTasks();
           }}
         />
       )}
+
+      <Toast toast={toast} onDismiss={() => setToast(null)} />
     </AdminLayout>
   );
 }

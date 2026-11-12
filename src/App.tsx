@@ -1,4 +1,5 @@
 import { useAuth } from '@/contexts/AuthContext';
+import { AudioProvider } from '@/contexts/AudioContext';
 import { useAdminRoute, useEmployeeRoute } from '@/lib/adminRoute';
 import { AdminConfirmationsPage } from '@/pages/AdminConfirmationsPage';
 import { AdminHomePage } from '@/pages/AdminHomePage';
@@ -24,39 +25,44 @@ export default function App() {
 
   if (loading) return <Spinner label="Loading Teamboard" />;
   if (!account) return <LoginPage />;
-  if (account.profile.must_change_password) return <ChangePasswordPage />;
 
-  if (account.role === 'admin') {
-    switch (adminRoute) {
-      case 'plan':
-        return <AdminPlanPage />;
-      case 'confirmations':
-        return <AdminConfirmationsPage />;
-      case 'time-requests':
-        return <AdminTimeRequestsPage />;
-      case 'leaderboard':
-        return <AdminLeaderboardPage />;
-      case 'rewards':
-        return <AdminRewardsPage />;
-      case 'reports':
-        return <AdminReportsPage />;
-      case 'overview-tasks':
-        return <AdminOverviewTasksPage />;
-      default:
-        return <AdminHomePage />;
+  const renderContent = () => {
+    if (account.profile.must_change_password) return <ChangePasswordPage />;
+
+    if (account.role === 'admin') {
+      switch (adminRoute) {
+        case 'plan':
+          return <AdminPlanPage />;
+        case 'confirmations':
+          return <AdminConfirmationsPage />;
+        case 'time-requests':
+          return <AdminTimeRequestsPage />;
+        case 'leaderboard':
+          return <AdminLeaderboardPage />;
+        case 'rewards':
+          return <AdminRewardsPage />;
+        case 'reports':
+          return <AdminReportsPage />;
+        case 'overview-tasks':
+          return <AdminOverviewTasksPage />;
+        default:
+          return <AdminHomePage />;
+      }
     }
-  }
 
-  switch (employeeRoute) {
-    case 'progress':
-      return <MyProgressPage />;
-    case 'leaderboard':
-      return <LeaderboardPage />;
-    case 'rewards':
-      return <RewardsPage />;
-    case 'feedback':
-      return <FeedbackPage />;
-    default:
-      return <TodayPage />;
-  }
+    switch (employeeRoute) {
+      case 'progress':
+        return <MyProgressPage />;
+      case 'leaderboard':
+        return <LeaderboardPage />;
+      case 'rewards':
+        return <RewardsPage />;
+      case 'feedback':
+        return <FeedbackPage />;
+      default:
+        return <TodayPage />;
+    }
+  };
+
+  return <AudioProvider>{renderContent()}</AudioProvider>;
 }

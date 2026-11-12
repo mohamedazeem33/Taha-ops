@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { Layers, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { AudioPlayer } from '@/components/AudioPlayer';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface AppShellProps {
@@ -64,6 +65,7 @@ export function AppShell({ children }: AppShellProps) {
               {account?.profile.full_name}
             </span>
             <ThemeToggle />
+            <AudioPlayer />
             <Button variant="secondary" onClick={() => void signOut()} aria-label="Log out">
               <LogOut className="h-4 w-4" aria-hidden="true" />
               <span className="hidden sm:inline">Log out</span>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Calendar, CheckCircle2, Clock3, Filter, Hourglass, ListChecks, XCircle } from 'lucide-react';
+import { Toast, type ToastMessage } from '@/components/Toast';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { DeleteTaskModal } from '@/components/admin/plan/DeleteTaskModal';
 import { EditTaskModal } from '@/components/admin/plan/EditTaskModal';
@@ -40,6 +41,7 @@ export function AdminPlanPage() {
   const [editTask, setEditTask] = useState<TaskWithRequests | null>(null);
   const [deleteTask, setDeleteTask] = useState<TaskWithRequests | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [toast, setToast] = useState<ToastMessage | null>(null);
 
   // Pre-select employee from hash query param (e.g. #/admin/plan?employee=uuid)
   useEffect(() => {
@@ -412,8 +414,11 @@ export function AdminPlanPage() {
         <EditTaskModal
           task={editTask}
           onClose={() => setEditTask(null)}
-          onSaved={() => {
+          onSaved={(toastMessage) => {
             setEditTask(null);
+            if (toastMessage) {
+              setToast({ id: Date.now(), text: toastMessage, tone: 'points' });
+            }
             void loadTasks();
             void reloadTodayTasks();
           }}
@@ -431,6 +436,8 @@ export function AdminPlanPage() {
           }}
         />
       )}
+
+      <Toast toast={toast} onDismiss={() => setToast(null)} />
     </AdminLayout>
   );
 }
