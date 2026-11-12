@@ -31,7 +31,10 @@ export function EmployeeList({ employees, summaries, onRequestToggle, onRequestR
         return (
           <li
             key={employee.id}
-            className="flex flex-col gap-4 px-5 py-4 transition-colors hover:bg-slate-50/80 md:flex-row md:items-center md:justify-between dark:hover:bg-slate-800/40"
+            onClick={() => {
+              window.location.hash = `#/admin/plan?employee=${employee.id}`;
+            }}
+            className="flex flex-col gap-4 px-5 py-4 transition-colors hover:bg-slate-50/80 md:flex-row md:items-center md:justify-between dark:hover:bg-slate-800/40 cursor-pointer"
           >
             <div className="flex min-w-0 items-center gap-3">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-100 text-sm font-semibold text-brand-800 dark:bg-brand-900/60 dark:text-brand-200">
@@ -56,7 +59,10 @@ export function EmployeeList({ employees, summaries, onRequestToggle, onRequestR
               {onRequestResetPin && (
                 <Button
                   variant="ghost"
-                  onClick={() => onRequestResetPin(employee)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRequestResetPin(employee);
+                  }}
                   className="!px-2.5 !py-2 text-xs text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
                   title="Reset Feedback PIN"
                 >
@@ -66,7 +72,10 @@ export function EmployeeList({ employees, summaries, onRequestToggle, onRequestR
               )}
               <Button
                 variant={employee.is_active ? 'danger' : 'secondary'}
-                onClick={() => onRequestToggle(employee)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRequestToggle(employee);
+                }}
                 className="!px-3 !py-2 text-xs"
               >
                 {employee.is_active ? (

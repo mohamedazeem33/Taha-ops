@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase';
 import { TASK_COLUMNS } from '@/lib/tasks';
+import { todayISTDate, yesterdayISTDate } from '@/lib/formatDate';
 import type { TaskDraft, TaskWithRequests, Task } from '@/types/database';
 
 const FALLBACK_MESSAGE = 'Something went wrong. Please try again.';
@@ -182,4 +183,63 @@ export async function rollOverTasks(day: string): Promise<number> {
   const { data, error } = await supabase.rpc('roll_over_tasks', { p_day: day });
   if (error || typeof data !== 'number') throw toError(error);
   return data;
+}
+
+export type PlanDateScope = 'today' | 'yesterday' | 'custom' | 'all_time';
+
+export async function transferTask(taskId: string, newEmployeeId: string): Promise<void> {
+  const { error } = await supabase.rpc('transfer_task', {
+    p_task_id: taskId,
+    p_new_employee: newEmployeeId,
+  });
+  if (error) throw toError(error);
+}
+
+export async function fetchEmployeePlanTasks(
+  employeeId: string,
+  scope: PlanDateScope,
+  customDate?: string,
+): Promise<{ tasks: TaskWithRequests[]; hitCap: boolean }> {
+  if (scope === 'today') {
+    const today = todayISTDate();
+    const allToday = await fetchTasksForDay(today, true);
+    const filtered = allToday.filter((t) => t.assigned_to === employeeId);
+    return { tasks: filtered, hitCap: false };
+  }
+
+  if (scope === 'yesterday') {
+    const yesterday = yesterdayISTDate();
+    const { data, error } = await supabase
+      .from('tasks')
+      .select(TASK_WITH_REQUESTS)
+      .eq('assigned_to', employeeId)
+      .eq('task_date', yesterday)
+      .order('deadline', { ascending: false });
+    if (error || !Array.isArray(data)) throw toError(error);
+    return { tasks: data as TaskWithRequests[], hitCap: false };
+  }
+
+  if (scope === 'custom' && customDate) {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select(TASK_WITH_REQUESTS)
+      .eq('assigned_to', employeeId)
+      .eq('task_date', customDate)
+      .order('deadline', { ascending: false });
+    if (error || !Array.isArray(data)) throw toError(error);
+    return { tasks: data as TaskWithRequests[], hitCap: false };
+  }
+
+  if (scope === 'all_time') {
+    const { data, error } = await supabase
+      .from('tasks')
+      .select(TASK_WITH_REQUESTS)
+      .eq('assigned_to', employeeId)
+      .order('deadline', { ascending: false })
+      .limit(500);
+    if (error || !Array.isArray(data)) throw toError(error);
+    return { tasks: data as TaskWithRequests[], hitCap: data.length >= 500 };
+  }
+
+  return { tasks: [], hitCap: false };
 }

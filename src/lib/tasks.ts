@@ -38,9 +38,9 @@ export interface DaySummary {
 
 export function summarizeDay(tasks: Task[], now: number): DaySummary {
   const total = tasks.length;
-  const done = tasks.filter((task) => isDoneStatus(task.status)).length;
+  const done = tasks.filter((task) => task.status === 'completed').length;
   const waiting = tasks.filter((task) => task.status === 'done_pending').length;
-  const late = tasks.filter((task) => task.status === 'missed' || isOverdue(task, now)).length;
+  const late = tasks.filter((task) => isOverdue(task, now)).length;
 
   let chip: DayChip = 'on_track';
   if (total === 0) chip = 'no_tasks';

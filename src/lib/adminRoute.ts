@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export type AdminRoute = 'home' | 'plan' | 'confirmations' | 'time-requests' | 'leaderboard' | 'rewards' | 'reports';
+export type AdminRoute = 'home' | 'plan' | 'confirmations' | 'time-requests' | 'leaderboard' | 'rewards' | 'reports' | 'overview-tasks';
 
 const ADMIN_ROUTES: AdminRoute[] = [
   'home',
@@ -10,6 +10,7 @@ const ADMIN_ROUTES: AdminRoute[] = [
   'leaderboard',
   'rewards',
   'reports',
+  'overview-tasks',
 ];
 
 export const ADMIN_ROUTE_PATHS: Record<AdminRoute, string> = {
@@ -20,11 +21,12 @@ export const ADMIN_ROUTE_PATHS: Record<AdminRoute, string> = {
   leaderboard: '#/admin/leaderboard',
   rewards: '#/admin/rewards',
   reports: '#/admin/reports',
+  'overview-tasks': '#/admin/overview-tasks',
 };
 
 function routeFromHash(hash: string): AdminRoute {
-  const name = hash.replace(/^#\/admin\/?/, '');
-  const match = ADMIN_ROUTES.find((route) => route === (name || 'home'));
+  const pathOnly = hash.replace(/^#\/admin\/?/, '').split('?')[0];
+  const match = ADMIN_ROUTES.find((route) => route === (pathOnly || 'home'));
   return match ?? 'home';
 }
 

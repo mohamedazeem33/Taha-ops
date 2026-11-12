@@ -21,9 +21,12 @@ export function PlanTaskRow({ task, onEdit, onDelete }: PlanTaskRowProps) {
           <span className="rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-semibold text-brand-800 dark:bg-brand-900/50 dark:text-brand-200">
             {task.client_name}
           </span>
+          <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            {formatDateIST(task.task_date)}
+          </span>
           {isCarriedOver && (
             <span className="inline-flex items-center rounded-full border border-amber-200/70 bg-amber-50/80 px-2.5 py-0.5 text-[11px] font-medium text-amber-800 dark:border-amber-800/40 dark:bg-amber-950/50 dark:text-amber-300">
-              Carried over from {formatDateIST(task.task_date)}
+              Carried over
             </span>
           )}
           <TaskStatusBadge status={task.status} />

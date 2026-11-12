@@ -69,6 +69,26 @@ export function TodayPage() {
     prevLogRef.current = pointsLog;
   }, [pointsLog, statsLoading]);
 
+  // Silent background refetch on tab visibility change and every 60 seconds
+  // Does not show spinner, does not reset scroll, does not close open modal
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        void reload();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        void reload();
+      }
+    }, 60_000);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      clearInterval(interval);
+    };
+  }, [reload]);
+
   useEffect(() => {
     if (allDone && !prevAllDoneRef.current) {
       setShowConfetti(true);

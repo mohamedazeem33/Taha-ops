@@ -6,6 +6,7 @@ import { AdminLeaderboardPage } from '@/pages/AdminLeaderboardPage';
 import { AdminPlanPage } from '@/pages/AdminPlanPage';
 import { AdminRewardsPage } from '@/pages/AdminRewardsPage';
 import { AdminReportsPage } from '@/pages/AdminReportsPage';
+import { AdminOverviewTasksPage } from '@/pages/AdminOverviewTasksPage';
 import { AdminTimeRequestsPage } from '@/pages/AdminTimeRequestsPage';
 import { ChangePasswordPage } from '@/pages/ChangePasswordPage';
 import { FeedbackPage } from '@/pages/FeedbackPage';
@@ -39,6 +40,8 @@ export default function App() {
         return <AdminRewardsPage />;
       case 'reports':
         return <AdminReportsPage />;
+      case 'overview-tasks':
+        return <AdminOverviewTasksPage />;
       default:
         return <AdminHomePage />;
     }

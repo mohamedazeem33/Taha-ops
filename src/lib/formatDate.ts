@@ -53,6 +53,12 @@ export function todayISTDate(now: Date = new Date()) {
   return istParts(now).day;
 }
 
+/** Yesterday's calendar day in IST as YYYY-MM-DD. */
+export function yesterdayISTDate() {
+  const d = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  return istParts(d).day;
+}
+
 /** Default 6 PM IST deadline for a day, in the value format of a datetime-local input. */
 export function defaultDeadlineInput(day: string) {
   return `${day}T18:00`;
