@@ -18,6 +18,7 @@ import {
   User,
 } from 'lucide-react';
 import { EmployeeLayout } from '@/components/employee/EmployeeLayout';
+import { useUnreadFeedback } from '@/hooks/useUnreadFeedback';
 import { Alert, Button, Field, Modal, TextAreaField } from '@/components/ui';
 import {
   changeFeedbackPin,
@@ -106,6 +107,7 @@ export function FeedbackPage() {
 // 1. SEND FEEDBACK VIEW
 // ---------------------------------------------------------------------------
 function SendFeedbackView() {
+  const { refresh } = useUnreadFeedback();
   const [recipients, setRecipients] = useState<FeedbackRecipient[]>([]);
   const [selectedRecipientId, setSelectedRecipientId] = useState('');
   const [selectedTag, setSelectedTag] = useState<FeedbackTag | null>(null);
@@ -156,6 +158,7 @@ function SendFeedbackView() {
       setMessage('');
       setSelectedRecipientId('');
       setSelectedTag(null);
+      void refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send feedback.');
     } finally {
@@ -330,6 +333,7 @@ function SendFeedbackView() {
 // 2. FEEDBACK INBOX VIEW (PIN + WHATSAPP-STYLE LIST)
 // ---------------------------------------------------------------------------
 function FeedbackInboxView() {
+  const { refresh } = useUnreadFeedback();
   const [pinStatus, setPinStatus] = useState<FeedbackPinStatus | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(true);
   const [unlockedPin, setUnlockedPin] = useState<string | null>(null);
@@ -436,14 +440,33 @@ function FeedbackInboxView() {
         setLockRemaining(status.remaining_seconds || 900);
         return;
       }
-      setMessages(data);
+
+      const unread = data.filter((m) => !m.read_at);
+      if (unread.length > 0) {
+        const nowIso = new Date().toISOString();
+        // Optimistically mark displayed messages as read in UI
+        setMessages(data.map((m) => (m.read_at ? m : { ...m, read_at: nowIso })));
+
+        // Persist mark-read to database for displayed messages
+        try {
+          await Promise.allSettled(unread.map((m) => markFeedbackMessageRead(m.id)));
+        } catch {
+          // Ignore background read error
+        }
+
+        // Refresh unread count immediately so badge drops to 0
+        void refresh();
+      } else {
+        setMessages(data);
+        void refresh();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch inbox.');
       setUnlockedPin(null);
     } finally {
       setLoadingMessages(false);
     }
-  }, []);
+  }, [refresh]);
 
   // When unlocked, load messages
   const handleUnlocked = (pin: string) => {
@@ -464,6 +487,7 @@ function FeedbackInboxView() {
       setMessages((prev) =>
         prev.map((m) => (m.id === messageId ? { ...m, read_at: new Date().toISOString() } : m)),
       );
+      void refresh();
     } catch {
       // Ignore background read error
     }

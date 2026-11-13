@@ -55,8 +55,12 @@ export const EMPLOYEE_ROUTE_PATHS: Record<EmployeeRoute, string> = {
 };
 
 function employeeRouteFromHash(hash: string): EmployeeRoute {
-  const name = hash.replace(/^#\/?/, '').replace(/^today\/?/, '');
-  const match = EMPLOYEE_ROUTES.find((route) => route === (name || 'today'));
+  const clean = hash
+    .replace(/^#\/?/, '')
+    .split('?')[0]
+    .split('#')[0]
+    .replace(/\/+$/, '');
+  const match = EMPLOYEE_ROUTES.find((route) => route === (clean || 'today'));
   return match ?? 'today';
 }
 

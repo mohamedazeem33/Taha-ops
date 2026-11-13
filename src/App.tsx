@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { AudioProvider } from '@/contexts/AudioContext';
+import { UnreadFeedbackProvider } from '@/contexts/UnreadFeedbackContext';
 import { useAdminRoute, useEmployeeRoute } from '@/lib/adminRoute';
 import { AdminConfirmationsPage } from '@/pages/AdminConfirmationsPage';
 import { AdminHomePage } from '@/pages/AdminHomePage';
@@ -50,18 +51,24 @@ export default function App() {
       }
     }
 
-    switch (employeeRoute) {
-      case 'progress':
-        return <MyProgressPage />;
-      case 'leaderboard':
-        return <LeaderboardPage />;
-      case 'rewards':
-        return <RewardsPage />;
-      case 'feedback':
-        return <FeedbackPage />;
-      default:
-        return <TodayPage />;
-    }
+    return (
+      <UnreadFeedbackProvider>
+        {(() => {
+          switch (employeeRoute) {
+            case 'progress':
+              return <MyProgressPage />;
+            case 'leaderboard':
+              return <LeaderboardPage />;
+            case 'rewards':
+              return <RewardsPage />;
+            case 'feedback':
+              return <FeedbackPage />;
+            default:
+              return <TodayPage />;
+          }
+        })()}
+      </UnreadFeedbackProvider>
+    );
   };
 
   return <AudioProvider>{renderContent()}</AudioProvider>;

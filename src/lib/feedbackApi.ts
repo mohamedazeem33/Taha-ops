@@ -103,3 +103,9 @@ export async function fetchAdminFeedbackStats(): Promise<AdminFeedbackStats> {
   };
 }
 
+export async function getUnreadFeedbackCount(): Promise<number> {
+  const { data, error } = await supabase.rpc('get_unread_feedback_count');
+  if (error) throw toError(error);
+  return typeof data === 'number' ? data : Number(data ?? 0);
+}
+

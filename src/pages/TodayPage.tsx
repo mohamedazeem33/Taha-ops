@@ -116,14 +116,12 @@ export function TodayPage() {
 
         {!loading && !error && (
           <>
-            {tasks.length > 0 && (
-              <StatsTopBar
-                totalPoints={totalPoints}
-                currentStreak={streak?.current_streak ?? 0}
-                doneCount={doneCount}
-                totalTasks={tasks.length}
-              />
-            )}
+            <StatsTopBar
+              totalPoints={totalPoints}
+              currentStreak={streak?.current_streak ?? 0}
+              doneCount={doneCount}
+              totalTasks={tasks.length}
+            />
 
             {actionError && <Alert tone="error">{actionError}</Alert>}
 

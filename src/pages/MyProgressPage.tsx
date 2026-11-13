@@ -1,24 +1,18 @@
+import { useEffect, useState } from 'react';
+import { Flame, Trophy } from 'lucide-react';
 import { EmployeeLayout } from '@/components/employee/EmployeeLayout';
 import { BadgeGallery } from '@/components/employee/BadgeGallery';
-import { StatsTopBar } from '@/components/employee/StatsTopBar';
+import { StatCard } from '@/components/StatCard';
 import { Alert, Spinner } from '@/components/ui';
 import { useGamificationStats } from '@/hooks/useGamificationStats';
-import { useTasksForDay } from '@/hooks/useTasksForDay';
 import { fetchAllBadges } from '@/lib/gamificationApi';
-import { formatDeadlineIST, todayISTDate } from '@/lib/formatDate';
-import { isDoneStatus } from '@/lib/tasks';
-import { useEffect, useState } from 'react';
+import { formatDeadlineIST } from '@/lib/formatDate';
 import type { Badge } from '@/types/database';
 
 export function MyProgressPage() {
-  const today = todayISTDate();
-  const { tasks } = useTasksForDay(today, false, true);
-  const { totalPoints, streak, pointsLog, badges, loading, error } = useGamificationStats();
+  const { streak, pointsLog, badges, loading, error } = useGamificationStats();
   const [allBadges, setAllBadges] = useState<Badge[]>([]);
   const [badgesLoading, setBadgesLoading] = useState(true);
-
-  const doneCount = tasks.filter((task) => isDoneStatus(task.status)).length;
-  const totalTasks = tasks.length;
 
   useEffect(() => {
     void fetchAllBadges()
@@ -26,6 +20,27 @@ export function MyProgressPage() {
       .catch(() => setAllBadges([]))
       .finally(() => setBadgesLoading(false));
   }, []);
+
+  // Smooth scroll to target section if navigated via a shortcut hash
+  useEffect(() => {
+    if (loading) return;
+    const hash = window.location.hash;
+    const targetId = hash.includes('points-history')
+      ? 'points-history'
+      : hash.includes('badges')
+      ? 'badges'
+      : hash.includes('streaks')
+      ? 'streaks'
+      : null;
+
+    if (targetId) {
+      const timer = window.setTimeout(() => {
+        const el = document.getElementById(targetId);
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 60);
+      return () => window.clearTimeout(timer);
+    }
+  }, [loading]);
 
   return (
     <EmployeeLayout active="progress">
@@ -42,22 +57,24 @@ export function MyProgressPage() {
 
         {!loading && !error && (
           <>
-            <StatsTopBar totalPoints={totalPoints} currentStreak={streak?.current_streak ?? 0} doneCount={doneCount} totalTasks={totalTasks} />
-
             {streak && (
-              <section className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-white/60 bg-white p-5 text-center shadow-sm dark:border-white/10 dark:bg-slate-900">
-                  <p className="font-display text-3xl font-black text-orange-500">{streak.current_streak}</p>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Current streak</p>
-                </div>
-                <div className="rounded-2xl border border-white/60 bg-white p-5 text-center shadow-sm dark:border-white/10 dark:bg-slate-900">
-                  <p className="font-display text-3xl font-black text-slate-900 dark:text-slate-100">{streak.best_streak}</p>
-                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Best streak</p>
-                </div>
+              <section id="streaks" className="grid grid-cols-2 gap-3 md:gap-4 scroll-mt-24">
+                <StatCard
+                  icon={Flame}
+                  iconTone="text-[#ff6a5c] bg-[#ff6a5c]/10 dark:text-[#ff9040] dark:bg-[#ff9040]/20"
+                  value={streak.current_streak}
+                  label="Current streak"
+                />
+                <StatCard
+                  icon={Trophy}
+                  iconTone="text-amber-600 bg-amber-50 dark:text-amber-300 dark:bg-amber-950/60"
+                  value={streak.best_streak}
+                  label="Best streak"
+                />
               </section>
             )}
 
-            <section className="space-y-4">
+            <section id="badges" className="space-y-4 scroll-mt-24">
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Badges</h2>
               {badgesLoading ? (
                 <Spinner label="Loading badges" />
@@ -66,7 +83,7 @@ export function MyProgressPage() {
               )}
             </section>
 
-            <section className="space-y-4">
+            <section id="points-history" className="space-y-4 scroll-mt-24">
               <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Points history</h2>
               {pointsLog.length === 0 ? (
                 <p className="rounded-2xl border border-dashed border-slate-300 px-5 py-10 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
