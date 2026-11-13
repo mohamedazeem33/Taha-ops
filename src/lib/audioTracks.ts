@@ -11,7 +11,7 @@ export interface AudioTrack {
 export const AUDIO_TRACKS: AudioTrack[] = [
   {
     title: 'Surah Rehman + Rain And Thunder Go To Sleep With Relaxing Quran Recitation',
-    path: '/audio/Surah Rehman + Rain And Thunder - Go To Sleep With Relaxing Quran Recitation.mp3',
+    path: '/audio/surah-rahman.mp3',
   },
 ];
 
