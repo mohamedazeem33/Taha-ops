@@ -35,7 +35,7 @@ export function EmployeeLayout({ active, children }: EmployeeLayoutProps) {
                   href={EMPLOYEE_ROUTE_PATHS[item.route]}
                   aria-current={isActive ? 'page' : undefined}
                   aria-label={showBadge ? `Feedback, ${badgeText} unread` : undefined}
-                  className={`flex items-center gap-1.5 whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                  className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 ${
                     isActive
                       ? 'bg-gradient-to-r from-[#ff4d79] via-[#ff6a5c] to-[#ff9040] text-[#1c0627] font-bold shadow-sm shadow-[#ff4d79]/20'
                       : 'text-slate-700 hover:bg-white/80 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white'
@@ -45,10 +45,10 @@ export function EmployeeLayout({ active, children }: EmployeeLayoutProps) {
                   {showBadge && (
                     <span
                       aria-hidden="true"
-                      className={`inline-flex h-4 min-w-[16px] items-center justify-center rounded-full px-1 text-[10px] font-bold leading-none shadow-sm transition-transform motion-safe:hover:scale-110 ${
+                      className={`inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-full px-1.5 text-xs font-black leading-none shadow-sm transition-transform motion-safe:hover:scale-105 ${
                         isActive
                           ? 'bg-[#1c0627] text-white dark:bg-white dark:text-[#1c0627]'
-                          : 'bg-gradient-to-r from-[#ff4d79] to-[#ff9040] text-[#1c0627]'
+                          : 'bg-gradient-to-r from-[#ff4d79] to-[#ff9040] text-[#1c0627] shadow-[#ff4d79]/30'
                       }`}
                     >
                       {badgeText}
