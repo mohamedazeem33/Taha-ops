@@ -9,6 +9,7 @@ import { Alert, Spinner } from '@/components/ui';
 import { useNow } from '@/hooks/useNow';
 import { useTasksForDay } from '@/hooks/useTasksForDay';
 import { useTeamEmployees } from '@/hooks/useTeamEmployees';
+import { useAdminAlerts } from '@/hooks/useAdminAlerts';
 import { formatDeadlineIST, todayIST, todayISTDate } from '@/lib/formatDate';
 import { isOpenStatus, isOverdue } from '@/lib/tasks';
 import type { Task, TaskWithRequests } from '@/types/database';
@@ -16,6 +17,7 @@ import type { Task, TaskWithRequests } from '@/types/database';
 export function AdminOverviewTasksPage() {
   const today = todayISTDate();
   const now = useNow();
+  const { refresh: refreshAlerts } = useAdminAlerts();
   const { employees, loading: employeesLoading, error: employeesError } = useTeamEmployees();
   const { tasks, loading: tasksLoading, error: tasksError, reload: reloadTasks } = useTasksForDay(today, true, true);
 
@@ -243,6 +245,7 @@ export function AdminOverviewTasksPage() {
           onReviewed={() => {
             setReviewingTask(null);
             void reloadTasks();
+            void refreshAlerts();
           }}
         />
       )}

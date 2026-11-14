@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext';
 import { AudioProvider } from '@/contexts/AudioContext';
+import { AdminAlertsProvider } from '@/contexts/AdminAlertsContext';
 import { UnreadFeedbackProvider } from '@/contexts/UnreadFeedbackContext';
 import { useAdminRoute, useEmployeeRoute } from '@/lib/adminRoute';
 import { AdminConfirmationsPage } from '@/pages/AdminConfirmationsPage';
@@ -31,24 +32,30 @@ export default function App() {
     if (account.profile.must_change_password) return <ChangePasswordPage />;
 
     if (account.role === 'admin') {
-      switch (adminRoute) {
-        case 'plan':
-          return <AdminPlanPage />;
-        case 'confirmations':
-          return <AdminConfirmationsPage />;
-        case 'time-requests':
-          return <AdminTimeRequestsPage />;
-        case 'leaderboard':
-          return <AdminLeaderboardPage />;
-        case 'rewards':
-          return <AdminRewardsPage />;
-        case 'reports':
-          return <AdminReportsPage />;
-        case 'overview-tasks':
-          return <AdminOverviewTasksPage />;
-        default:
-          return <AdminHomePage />;
-      }
+      return (
+        <AdminAlertsProvider>
+          {(() => {
+            switch (adminRoute) {
+              case 'plan':
+                return <AdminPlanPage />;
+              case 'confirmations':
+                return <AdminConfirmationsPage />;
+              case 'time-requests':
+                return <AdminTimeRequestsPage />;
+              case 'leaderboard':
+                return <AdminLeaderboardPage />;
+              case 'rewards':
+                return <AdminRewardsPage />;
+              case 'reports':
+                return <AdminReportsPage />;
+              case 'overview-tasks':
+                return <AdminOverviewTasksPage />;
+              default:
+                return <AdminHomePage />;
+            }
+          })()}
+        </AdminAlertsProvider>
+      );
     }
 
     return (

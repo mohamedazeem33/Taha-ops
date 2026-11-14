@@ -3,10 +3,12 @@ import { CalendarClock, Inbox } from 'lucide-react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ReviewTimeRequestModal } from '@/components/admin/ReviewTimeRequestModal';
 import { Alert, Button, Spinner } from '@/components/ui';
+import { useAdminAlerts } from '@/hooks/useAdminAlerts';
 import { fetchPendingTimeRequests, type PendingTimeRequest } from '@/lib/taskApi';
 import { todayIST, formatDeadlineIST, formatTimeIST } from '@/lib/formatDate';
 
 export function AdminTimeRequestsPage() {
+  const { refresh: refreshAlerts } = useAdminAlerts();
   const [requests, setRequests] = useState<PendingTimeRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,7 +32,7 @@ export function AdminTimeRequestsPage() {
 
   const handleReviewed = async () => {
     setReviewing(null);
-    await load();
+    await Promise.all([load(), refreshAlerts()]);
   };
 
   return (

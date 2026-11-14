@@ -4,6 +4,7 @@ import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ReviewTaskModal } from '@/components/admin/ReviewTaskModal';
 import { Alert, Button, Spinner } from '@/components/ui';
 import { useTasksForDay } from '@/hooks/useTasksForDay';
+import { useAdminAlerts } from '@/hooks/useAdminAlerts';
 import { todayIST, todayISTDate, formatTimeIST } from '@/lib/formatDate';
 import { fetchTasksAwaitingConfirmation } from '@/lib/taskApi';
 import type { Task } from '@/types/database';
@@ -13,6 +14,7 @@ type AwaitingTask = Task & { assignee: { full_name: string } | null };
 export function AdminConfirmationsPage() {
   const today = todayISTDate();
   const { reload: reloadToday } = useTasksForDay(today);
+  const { refresh: refreshAlerts } = useAdminAlerts();
   const [tasks, setTasks] = useState<AwaitingTask[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +39,7 @@ export function AdminConfirmationsPage() {
   const handleReviewed = async () => {
     setReviewing(null);
     setActionError(null);
-    await Promise.all([load(), reloadToday()]);
+    await Promise.all([load(), reloadToday(), refreshAlerts()]);
   };
 
   return (

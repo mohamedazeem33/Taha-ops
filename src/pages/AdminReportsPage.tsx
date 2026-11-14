@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { Alert, Button, Modal } from '@/components/ui';
+import { useAdminAlerts } from '@/hooks/useAdminAlerts';
 import {
   deleteReportedFeedback,
   fetchAdminFeedbackStats,
@@ -20,6 +21,7 @@ import { formatDateTimeIST } from '@/lib/formatDate';
 import type { AdminFeedbackStats, ReportedFeedbackMessage } from '@/types/database';
 
 export function AdminReportsPage() {
+  const { refresh: refreshAlerts } = useAdminAlerts();
   const [reports, setReports] = useState<ReportedFeedbackMessage[]>([]);
   const [stats, setStats] = useState<AdminFeedbackStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,12 +39,13 @@ export function AdminReportsPage() {
       ]);
       setReports(reportsData);
       setStats(statsData);
+      void refreshAlerts();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load reported feedback.');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [refreshAlerts]);
 
   useEffect(() => {
     void loadData();
@@ -56,6 +59,7 @@ export function AdminReportsPage() {
       setReports((prev) => prev.filter((r) => r.id !== deletingReport.id));
       setStats((prev) => (prev ? { ...prev, total_reported: Math.max(0, prev.total_reported - 1) } : null));
       setDeletingReport(null);
+      void refreshAlerts();
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Could not delete report.');
     } finally {
