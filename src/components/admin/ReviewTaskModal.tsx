@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { Alert, Button, Modal, TextAreaField } from '@/components/ui';
+import { TaskSubmissionInfo } from '@/components/TaskSubmissionInfo';
 import { reviewTask } from '@/lib/taskApi';
 import type { Task } from '@/types/database';
 
@@ -43,6 +44,7 @@ export function ReviewTaskModal({ task, decision, onClose, onReviewed }: ReviewT
     >
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
         {error && <Alert tone="error">{error}</Alert>}
+        <TaskSubmissionInfo link={task.submission_link} note={task.submission_note} />
         {isReject && (
           <TextAreaField
             id="reject-reason"

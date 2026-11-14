@@ -32,6 +32,8 @@ export interface Task {
   confirmed_at: string | null;
   rejection_reason: string | null;
   rolled_over_from: string | null;
+  submission_link: string | null;
+  submission_note: string | null;
   created_at: string;
 }
 
@@ -53,6 +55,15 @@ export interface TaskDraft {
   deadline: string;
 }
 
+export interface PointsLogTask {
+  id: string;
+  title: string;
+  client_name: string;
+  deadline: string;
+  done_at: string | null;
+  status: string;
+}
+
 export interface PointsLogEntry {
   id: string;
   employee_id: string;
@@ -60,6 +71,7 @@ export interface PointsLogEntry {
   points: number;
   reason: string;
   created_at: string;
+  task?: PointsLogTask | null;
 }
 
 export interface EmployeeStreak {

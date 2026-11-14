@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { CheckCircle2, Inbox, Hourglass, XCircle } from 'lucide-react';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { ReviewTaskModal } from '@/components/admin/ReviewTaskModal';
+import { TaskSubmissionInfo } from '@/components/TaskSubmissionInfo';
 import { Alert, Button, Spinner } from '@/components/ui';
 import { useTasksForDay } from '@/hooks/useTasksForDay';
 import { useAdminAlerts } from '@/hooks/useAdminAlerts';
@@ -92,6 +93,7 @@ export function AdminConfirmationsPage() {
                 <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
                   {task.assignee?.full_name ?? 'Employee'} · marked done{task.done_at ? ` at ${formatTimeIST(task.done_at)}` : ''}
                 </p>
+                <TaskSubmissionInfo link={task.submission_link} note={task.submission_note} className="mt-3" />
                 <div className="mt-5 flex flex-col gap-2.5 sm:flex-row">
                   <Button onClick={() => setReviewing({ task, decision: 'confirm' })}>
                     <CheckCircle2 className="h-4 w-4" aria-hidden="true" />

@@ -94,8 +94,12 @@ export async function fetchPendingTimeRequests(): Promise<PendingTimeRequest[]> 
   return data as unknown as PendingTimeRequest[];
 }
 
-export async function markTaskDone(taskId: string) {
-  const { error } = await supabase.rpc('mark_task_done', { p_task_id: taskId });
+export async function markTaskDone(taskId: string, link?: string, note?: string) {
+  const { error } = await supabase.rpc('mark_task_done', {
+    p_task_id: taskId,
+    p_link: link ?? null,
+    p_note: note ?? null,
+  });
   if (error) throw toError(error);
 }
 

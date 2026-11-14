@@ -15,13 +15,22 @@ function toError(error: { message?: string } | null): Error {
   return new Error(error?.message?.trim() || FALLBACK_MESSAGE);
 }
 
-export async function fetchMyPointsLog(): Promise<PointsLogEntry[]> {
+export async function fetchMyPointsLog(limit = 50, offset = 0): Promise<PointsLogEntry[]> {
   const { data, error } = await supabase
     .from('points_log')
-    .select('id, employee_id, task_id, points, reason, created_at')
-    .order('created_at', { ascending: false });
+    .select(`
+      id,
+      employee_id,
+      task_id,
+      points,
+      reason,
+      created_at,
+      task:tasks!task_id(id, title, client_name, deadline, done_at, status)
+    `)
+    .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1);
   if (error || !Array.isArray(data)) throw toError(error);
-  return data as PointsLogEntry[];
+  return data as unknown as PointsLogEntry[];
 }
 
 export async function fetchMyStreak(): Promise<EmployeeStreak | null> {

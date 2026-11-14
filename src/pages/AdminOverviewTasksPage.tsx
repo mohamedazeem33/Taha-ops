@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowLeft, CheckCircle2, Clock3, Edit3, Hourglass, ListTodo, UserRound } from 'lucide-react';
 import { Toast, type ToastMessage } from '@/components/Toast';
 import { TaskStatusBadge } from '@/components/TaskStatusBadge';
+import { TaskSubmissionLinkIcon } from '@/components/TaskSubmissionInfo';
 import { AdminLayout } from '@/components/admin/AdminLayout';
 import { EditTaskModal } from '@/components/admin/plan/EditTaskModal';
 import { ReviewTaskModal } from '@/components/admin/ReviewTaskModal';
@@ -191,6 +192,7 @@ export function AdminOverviewTasksPage() {
                                     {task.client_name}
                                   </span>
                                   <TaskStatusBadge status={task.status} />
+                                  {task.submission_link && <TaskSubmissionLinkIcon link={task.submission_link} />}
                                 </div>
                                 <p className="truncate font-medium text-slate-900 dark:text-slate-100 text-sm">
                                   {task.title}

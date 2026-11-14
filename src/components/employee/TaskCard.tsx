@@ -1,6 +1,7 @@
 import { AlertCircle, CheckCircle2, Clock3, Hourglass, MessageSquareWarning } from 'lucide-react';
 import { DeadlineCountdown } from '@/components/employee/DeadlineCountdown';
 import { TaskStatusBadge } from '@/components/TaskStatusBadge';
+import { TaskSubmissionInfo } from '@/components/TaskSubmissionInfo';
 import { Button } from '@/components/ui';
 import { formatDateIST, formatDeadlineIST, todayISTDate } from '@/lib/formatDate';
 import { isOpenStatus, isOverdue, latestPendingRequest, latestRejectedRequest } from '@/lib/tasks';
@@ -79,10 +80,13 @@ export function TaskCard({ task, now, busy, onDone, onRequestTime }: TaskCardPro
       )}
 
       {task.status === 'done_pending' && (
-        <p className="mt-4 flex items-center gap-2 text-sm font-medium text-amber-700 dark:text-amber-300">
-          <Hourglass className="h-4 w-4" aria-hidden="true" />
-          Waiting for admin confirmation
-        </p>
+        <div className="mt-4 space-y-2.5">
+          <p className="flex items-center gap-2 text-sm font-medium text-amber-700 dark:text-amber-300">
+            <Hourglass className="h-4 w-4" aria-hidden="true" />
+            Waiting for admin confirmation
+          </p>
+          <TaskSubmissionInfo link={task.submission_link} note={task.submission_note} />
+        </div>
       )}
 
       {task.status === 'completed' && (

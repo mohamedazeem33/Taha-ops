@@ -3,6 +3,7 @@ import { CalendarDays, Sparkles } from 'lucide-react';
 import { Confetti } from '@/components/Confetti';
 import { Toast, type ToastMessage } from '@/components/Toast';
 import { EmployeeLayout } from '@/components/employee/EmployeeLayout';
+import { MarkDoneModal } from '@/components/employee/MarkDoneModal';
 import { RequestTimeModal } from '@/components/employee/RequestTimeModal';
 import { StatsTopBar } from '@/components/employee/StatsTopBar';
 import { TaskCard } from '@/components/employee/TaskCard';
@@ -25,6 +26,7 @@ export function TodayPage() {
   const [busyTaskId, setBusyTaskId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const [requestTask, setRequestTask] = useState<TaskWithRequests | null>(null);
+  const [completingTask, setCompletingTask] = useState<TaskWithRequests | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [toast, setToast] = useState<ToastMessage | null>(null);
   const prevLogRef = useRef<PointsLogEntry[]>([]);
@@ -44,14 +46,16 @@ export function TodayPage() {
     });
   }, [tasks, now]);
 
-  const handleDone = async (task: TaskWithRequests) => {
+  const handleDone = async (task: TaskWithRequests, link?: string, note?: string) => {
     setBusyTaskId(task.id);
     setActionError(null);
     try {
-      await markTaskDone(task.id);
+      await markTaskDone(task.id, link, note);
+      setCompletingTask(null);
       await reload();
     } catch (doneError) {
       setActionError(doneError instanceof Error ? doneError.message : 'Something went wrong. Please try again.');
+      throw doneError;
     } finally {
       setBusyTaskId(null);
     }
@@ -63,11 +67,15 @@ export function TodayPage() {
     if (prev.length > 0 && pointsLog.length > prev.length) {
       const newest = pointsLog[0];
       if (newest && newest.points > 0) {
-        setToast({ id: Date.now(), text: `+${newest.points} points — ${newest.reason}`, tone: 'points' });
+        const taskTitle = newest.task?.title || tasks.find((t) => t.id === newest.task_id)?.title;
+        const text = taskTitle
+          ? `+${newest.points} points — ${taskTitle} · ${newest.reason}`
+          : `+${newest.points} points — ${newest.reason}`;
+        setToast({ id: Date.now(), text, tone: 'points' });
       }
     }
     prevLogRef.current = pointsLog;
-  }, [pointsLog, statsLoading]);
+  }, [pointsLog, statsLoading, tasks]);
 
   // Silent background refetch on tab visibility change and every 60 seconds
   // Does not show spinner, does not reset scroll, does not close open modal
@@ -141,7 +149,7 @@ export function TodayPage() {
                     task={task}
                     now={now}
                     busy={busyTaskId === task.id}
-                    onDone={(item) => void handleDone(item)}
+                    onDone={(item) => setCompletingTask(item)}
                     onRequestTime={setRequestTask}
                   />
                 ))}
@@ -153,6 +161,14 @@ export function TodayPage() {
 
       <Confetti show={showConfetti} onDone={() => setShowConfetti(false)} />
       <Toast toast={toast} onDismiss={() => setToast(null)} />
+
+      {completingTask && (
+        <MarkDoneModal
+          task={completingTask}
+          onClose={() => setCompletingTask(null)}
+          onSubmit={(link, note) => handleDone(completingTask, link, note)}
+        />
+      )}
 
       {requestTask && account && (
         <RequestTimeModal

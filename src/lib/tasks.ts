@@ -1,7 +1,7 @@
 import type { Task, TaskStatus, TaskWithRequests, TimeRequest } from '@/types/database';
 
 export const TASK_COLUMNS =
-  'id, assigned_to, assigned_by, task_date, client_name, title, description, deadline, status, done_at, confirmed_at, rejection_reason, rolled_over_from, created_at';
+  'id, assigned_to, assigned_by, task_date, client_name, title, description, deadline, status, done_at, confirmed_at, rejection_reason, rolled_over_from, submission_link, submission_note, created_at';
 
 const HOUR_MS = 60 * 60 * 1000;
 

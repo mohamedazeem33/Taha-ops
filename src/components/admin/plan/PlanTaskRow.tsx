@@ -1,5 +1,6 @@
 import { CheckCircle2, Pencil, Trash2 } from 'lucide-react';
 import { TaskStatusBadge } from '@/components/TaskStatusBadge';
+import { TaskSubmissionLinkIcon } from '@/components/TaskSubmissionInfo';
 import { formatDateIST, formatDeadlineIST, todayISTDate } from '@/lib/formatDate';
 import { isOpenStatus } from '@/lib/tasks';
 import type { TaskWithRequests } from '@/types/database';
@@ -30,6 +31,7 @@ export function PlanTaskRow({ task, onEdit, onDelete }: PlanTaskRowProps) {
             </span>
           )}
           <TaskStatusBadge status={task.status} />
+          {task.submission_link && <TaskSubmissionLinkIcon link={task.submission_link} />}
         </div>
         <p className="truncate font-medium text-slate-900 dark:text-slate-100">{task.title}</p>
         <p className="text-sm text-slate-500 dark:text-slate-400">Due {formatDeadlineIST(task.deadline)} IST</p>
